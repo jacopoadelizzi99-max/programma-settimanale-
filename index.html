@@ -1,0 +1,143 @@
+
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#183a69">
+<title>La mia alimentazione</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f2f5fa;color:#17243a;font-family:Arial,sans-serif}
+header{background:#183a69;color:white;padding:30px 20px;border-radius:0 0 25px 25px}
+h1{font-size:27px;margin:0 0 8px}
+header p{margin:0;color:#dce8fb}
+main{max-width:650px;margin:auto;padding:18px}
+.days{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.days button{border:0;border-radius:12px;background:white;color:#183a69;padding:14px 0;font-weight:bold}
+.days button.active{background:#2465bd;color:white}
+.card{background:white;padding:20px;border-radius:18px;margin-top:16px;box-shadow:0 3px 12px #17243a0d}
+h2{margin:0 0 8px;font-size:22px}
+.tag{color:#2465bd;font-weight:bold}
+.meal{padding:15px 0;border-bottom:1px solid #e8edf3}
+.meal:last-child{border:0}
+.meal strong{display:block;margin-bottom:6px}
+.meal p{margin:0;line-height:1.5}
+select{padding:12px;width:100%;border-radius:10px;border:1px solid #ccd5e0;font-size:16px;margin-top:8px}
+.note{color:#59677b;line-height:1.6;font-size:14px}
+</style>
+</head>
+<body>
+<header>
+<h1>La mia alimentazione</h1>
+<p>Calcio, palestra e crescita muscolare</p>
+</header>
+<main>
+<div class="days" id="days"></div>
+<section class="card">
+<h2 id="title"></h2>
+<div class="tag" id="activity"></div>
+<div id="matchBox" style="display:none;margin-top:15px">
+<label for="match">Quando giochi?</label>
+<select id="match" onchange="showDay(6)">
+<option value="mattina">Partita di mattina</option>
+<option value="pomeriggio">Partita di pomeriggio</option>
+</select>
+</div>
+<div id="meals"></div>
+</section>
+<section class="card">
+<h2>Consigli per crescere</h2>
+<p class="note">Mangia abbastanza per sostenere gli allenamenti e la crescita. Non saltare i pasti. Bevi regolarmente e dormi 8-10 ore.</p>
+<p class="note">Questo è un esempio di menù, non una dieta personalizzata. Le quantità vanno adattate alla fame, alla crescita e all'attività sportiva con un professionista esperto in adolescenti.</p>
+</section>
+</main>
+<script>
+const data=[
+["Lunedì","Palestra - 17:00/17:30",[
+"Latte, pane tostato e banana",
+"Yogurt e frutta",
+"Pasta al pomodoro, pollo e verdure",
+"Pane con marmellata",
+"Riso, salmone e verdure"]],
+["Martedì","Calcio - 17:00",[
+"Yogurt, avena e frutta",
+"Panino con ricotta",
+"Riso, tacchino e verdure",
+"Banana e pane",
+"Pasta con ceci e verdure"]],
+["Mercoledì","Palestra - 18:00",[
+"Latte, pane e marmellata",
+"Frutta e yogurt",
+"Pasta con tonno e verdure",
+"Panino piccolo e frutta",
+"Patate, frittata e verdure"]],
+["Giovedì","Calcio - 18:00",[
+"Yogurt, cereali e frutta",
+"Pane con formaggio fresco",
+"Pasta al ragù e verdure",
+"Banana e crackers",
+"Riso, pollo e verdure"]],
+["Venerdì","Calcio o palestra - 18:30",[
+"Latte, pane e frutta",
+"Yogurt e cereali",
+"Pasta con lenticchie e verdure",
+"Pane con marmellata",
+"Pizza margherita e verdure"]],
+["Sabato","Riposo e recupero",[
+"Yogurt, pane e frutta",
+"Frutta e noci",
+"Riso, pesce e verdure",
+"Pane e ricotta",
+"Pasta, uova e verdure"]],
+["Domenica","Partita di calcio",[
+"Latte o yogurt, pane e marmellata",
+"Frutta e pane",
+"Pasta, pollo e verdure",
+"Yogurt e frutta",
+"Patate, pesce e verdure"]]
+];
+const labels=["Colazione","Spuntino","Pranzo","Merenda / pre-allenamento","Cena"];
+const short=["Lun","Mar","Mer","Gio","Ven","Sab","Dom"];
+const days=document.getElementById("days");
+short.forEach((name,i)=>{
+const button=document.createElement("button");
+button.textContent=name;
+button.onclick=()=>showDay(i);
+days.appendChild(button);
+});
+function showDay(i){
+document.querySelectorAll(".days button").forEach((b,j)=>{
+b.classList.toggle("active",i===j);
+});
+document.getElementById("title").textContent=data[i][0];
+document.getElementById("activity").textContent=data[i][1];
+document.getElementById("matchBox").style.display=i===6?"block":"none";
+let meals=data[i][2].slice();
+if(i===6){
+if(document.getElementById("match").value==="mattina"){
+meals[0]="Pane con marmellata, latte o yogurt, con anticipo sufficiente sulla partita";
+meals[1]="Se serve, banana prima della partita";
+meals[2]="Dopo la partita: pasta, pollo e verdure";
+}else{
+meals[2]="Prima della partita: pasta con condimento semplice, con sufficiente anticipo";
+meals[3]="Dopo la partita: yogurt e panino se la cena è lontana";
+}
+}
+const container=document.getElementById("meals");
+container.replaceChildren();
+meals.forEach((meal,j)=>{
+const section=document.createElement("div");
+section.className="meal";
+const title=document.createElement("strong");
+title.textContent=labels[j];
+const description=document.createElement("p");
+description.textContent=meal;
+section.append(title,description);
+container.appendChild(section);
+});
+}
+showDay(0);
+</script>
+</body>
+</html>
